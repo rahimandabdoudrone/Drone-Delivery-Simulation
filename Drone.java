@@ -5,7 +5,7 @@ import java.util.Objects;
 public abstract class Drone {
 
     private static int counter = 0;
-//kjtcrhkjyu
+
     protected int id;
     protected Position position;
     protected double battery;
@@ -107,4 +107,5 @@ public abstract class Drone {
         return Objects.hash(id);
     }
 }
+
 
