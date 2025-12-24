@@ -1,65 +1,47 @@
-import java.util.Objects;
-
+package GEO;
 public class Position {
-
     private double x;
     private double y;
-
-    public Position(double x, double y) {
-        this.x = x;
-        this.y = y;
+    public Position (double x,double y){
+        this.x=x;
+        this.y=y;
     }
-
-    public double distanceTo(Position other) {
-        double dx = this.x - other.x;
-        double dy = this.y - other.y;
-        return Math.sqrt(dx * dx + dy * dy);
+    public double getx(){
+        return this.x;
     }
-
-    public void moveTo(Position destination, double step) {
-        double distance = distanceTo(destination);
-        if (distance == 0 || step >= distance) {
-            this.x = destination.x;
-            this.y = destination.y;
+    public double gety(){
+        return this.y;
+    }
+    public void setx(double x){
+        this.x=x;
+    }
+    public void sety(double y){
+        this.y=y;
+    }
+    public double distanceTo(Position other){
+        double dx=other.x - this.x;
+        double dy=other.y - this.y;
+        return Math.sqrt(dx*dx + dy*dy);
+    }
+    public void moveTo(Position distination,double step){
+        double distance=this.distanceTo(distination);
+        if(distance<=step){
+            this.x=distination.x;
+            this.y=distination.y;
             return;
         }
-        double ratio = step / distance;
-        this.x += (destination.x - this.x) * ratio;
-        this.y += (destination.y - this.y) * ratio;
+        double scale=step/distance;
+        this.x=this.x+(distination.x - this.x)*scale;
+        this.y=this.y+(distination.y - this.y)*scale;
     }
-
-    public double getX() {
-        return x;
+    public String toString(){
+        return "position("+this.x+" , "+this.y+")";
     }
-
-    public double getY() {
-        return y;
-    }
-
-    public void setX(double x) {
-        this.x = x;
-    }
-
-    public void setY(double y) {
-        this.y = y;
-    }
-
-    @Override
-    public String toString() {
-        return "(" + x + ", " + y + ")";
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Position)) return false;
-        Position p = (Position) o;
-        return Double.compare(p.x, x) == 0 &&
-               Double.compare(p.y, y) == 0;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(x, y);
+    public int equals(Position p){
+        if(this.x==p.x && this.y==p.y){
+            return 1;
+        }else{
+            return 0;
+        }
     }
 }
