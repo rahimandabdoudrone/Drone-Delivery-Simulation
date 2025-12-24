@@ -1,39 +1,30 @@
-import java.util.ArrayList;
+package GEO;
 import java.util.List;
-
+import java.util.ArrayList;
 public class Map {
-
     private List<DeliveryZone> deliveryZones;
     private List<NoFlyZone> noFlyZones;
-
-    public Map() {
-        deliveryZones = new ArrayList<>();
-        noFlyZones = new ArrayList<>();
+    
+    public Map(){
+        this.deliveryZones=new ArrayList<>();
+        this.noFlyZones=new ArrayList<>();
     }
-
-    public void addDeliveryZone(DeliveryZone z) {
-        deliveryZones.add(z);
+    public void addDelzone(DeliveryZone zone){
+        this.deliveryZones.add(zone);
     }
-
-    public void addNoFlyZone(NoFlyZone z) {
-        noFlyZones.add(z);
+    public void addNFzone(NoFlyZone zone){
+        this.noFlyZones.add(zone);
     }
-
-    public boolean isAllowed(Position p) {
-        for (NoFlyZone z : noFlyZones) {
-            if (z.contains(p)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public boolean isForbidden(Position p) {
-        for (NoFlyZone z : noFlyZones) {
-            if (z.contains(p)) {
+    public boolean isForbidden(Position p){
+        int i;
+        for(i=0;i<this.noFlyZones.size();i++){
+            if(this.noFlyZones.get(i).contains(p)){
                 return true;
             }
         }
         return false;
+    }
+    public boolean isAllowed(Position p){
+        return !this.isForbidden(p);
     }
 }
