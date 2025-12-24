@@ -1,109 +1,79 @@
-import java.util.ArrayList;
+package DroneHierarchi;
+import GEO.Position;
 import java.util.List;
-import java.util.Objects;
-
+import java.util.ArrayList;
 public abstract class Drone {
-
-    private static int counter = 0;
-
-    protected int id;
-    protected Position position;
-    protected double battery;
-    protected String model;
-    protected double speed;
-    protected double capacity;
-    protected String status;
-    protected double totalDistance;
-    protected List<Position> positionHistory;
-
-    public Drone(Position position, String model, double speed, double capacity) {
-        this.id = ++counter;
-        this.position = position;
-        this.model = model;
-        this.speed = speed;
-        this.capacity = capacity;
-        this.battery = 100.0;
-        this.status = "AVAILABLE";
-        this.totalDistance = 0.0;
-        this.positionHistory = new ArrayList<>();
-        this.positionHistory.add(position);
+  private int id;
+  private Position position;
+  private double battery;
+  private String model;
+  private double speed;
+  private double capacity;
+  private String status;
+  private double totalDistance;
+  private List<Position>positionHistory;
+  private static int counter=1;
+ public Drone(Position p,String m,double s,double c){
+    this.id=counter++;
+    this.position=p;
+    this.battery=100;
+    this.capacity=c;
+    this.speed=s;
+    this.model=m;
+    this.status="AVAILABLE";
+    this.totalDistance=0;
+    this.positionHistory=new ArrayList<>();
+ } 
+ public abstract double calculateConsumption(double distance);
+ 
+ public boolean canFlyTo(Position destination){
+    double dis=this.position.distanceTo(destination)*2;
+    double needed=this.calculateConsumption(dis);
+    return this.battery>=needed;
+ }
+ public void FlyTo(Position destination){
+    double dis=this.position.distanceTo(destination);
+    double consumption=this.calculateConsumption(dis);
+    this.battery=this.battery-consumption;
+    this.totalDistance=this.totalDistance+dis;
+    this.position=destination;
+    this.positionHistory.add(destination);
+ }
+ public void recharge(double percentage){
+    this.battery=Math.min(100,this.battery+percentage);
+ }
+ public String toString(){
+    return "Drone: "+this.id+" model: "+this.model+" battery= "+this.battery+"%";
+ }
+ public int equals(Drone d){
+    if(this.id==d.id){
+        return 1;
+    }else{
+        return 0;
     }
-
-    public abstract double calculateConsumption(double distance);
-
-    public boolean canFlyTo(Position destination) {
-        double distance = position.distanceTo(destination) * 2;
-        double consumption = calculateConsumption(distance);
-        return battery >= consumption;
-    }
-
-    public void flyTo(Position destination) {
-        double distance = position.distanceTo(destination);
-        double consumption = calculateConsumption(distance);
-
-        if (battery < consumption) {
-            return;
-        }
-
-        battery -= consumption;
-        totalDistance += distance;
-        position = destination;
-        positionHistory.add(destination);
-    }
-
-    public void recharge(double percentage) {
-        battery += percentage;
-        if (battery > 100) {
-            battery = 100;
-        }
-    }
-
-    public double getBattery() {
-        return battery;
-    }
-
-    public double getCapacity() {
-        return capacity;
-    }
-
-    public Position getPosition() {
-        return position;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public double getTotalDistance() {
-        return totalDistance;
-    }
-
-    @Override
-    public String toString() {
-        return "Drone{" +
-                "id=" + id +
-                ", model='" + model + '\'' +
-                ", battery=" + battery +
-                ", speed=" + speed +
-                ", capacity=" + capacity +
-                ", status='" + status + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Drone)) return false;
-        Drone drone = (Drone) o;
-        return id == drone.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
+ }
+ public double getspeed(){
+    return this.speed;
+ }
+ public double getbattery(){
+    return this.battery;
+ }
+ public String getstuts(){
+   return this.status;
+ }
+ public double getcapacity(){
+   return this.capacity;
+ }
+ public Position getposition(){
+   return this.position;
+ }
+ public String getmodel(){
+   return this.model;
+ }
+ public void setstatus(String stut){
+   this.status=stut;
+ }
+ public double gettotaldistance(){
+   return this.totalDistance;
+ }
 }
